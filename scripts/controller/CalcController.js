@@ -38,75 +38,120 @@ class CalcController {
 
     }
 
-    clearAll(){
-            this._operation = []
+    clearAll() {
+        this._operation = []
     }
 
-    clearEntry(){
+    clearEntry() {
 
         this._operation.pop()
     }
 
-    addOperation(value){
+    getLastOperation() {
 
-        this._operation.push(value)
+        return this._operation[this._operation.length - 1]
 
-        console.log( this._operation)
     }
 
-    setError(){
+    setLastOperation(value) {
+
+        this._operation[this._operation.length - 1] = value
+    }
+
+    isOperador(value) {
+
+        return (['+', '-', '*', '%', '/'].indexOf(value) > -1)
+    }
+
+    addOperation(value) {
+
+
+        console.log('aaaa', this.getLastOperation())
+
+        if (isNaN(this.getLastOperation())) {
+
+            if (this.isOperador()) {
+
+                this.setLastOperation(value)
+
+            } else if (isNaN(value)) {
+
+                //outra coisa
+                console.log()
+            } else {
+
+                this._operation.push(value)
+
+            }
+
+        } else {
+
+            let newValue = this.getLastOperation().toString() + value.toString()
+            this.setLastOperation(parseInt(newValue))
+
+        }
+
+        console.log(this._operation)
+    }
+
+    setError() {
 
         this.displayCalc = "Error"
     }
 
-    execBtn(value){
+    execBtn(value) {
 
-        switch(value){
+        switch (value) {
 
             case 'ac':
                 this.clearAll()
                 break
-                
+
             case 'ce':
-                this.clearAll()
+                this.clearEntry()
                 break
-                
+
             case 'soma':
-                this.clearAll()
+                this.addOperation('+')
                 break
-                
+
             case 'divisao':
-                this.clearAll()
+                this.addOperation('/')
                 break
-                
+
             case 'multiplicacao':
-                this.clearAll()
+                this.addOperation('*')
                 break
 
-                case 'porcento':
-                this.clearAll()
+            case 'porcento':
+                this.addOperation('%')
                 break
 
-                case 'igual':
-                this.clearAll()
+            case 'igual':
+
                 break
 
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    this.addOperation(parseInt(value))
+            case 'ponto':
+                this.addOperation('.')
                 break
 
-                default :
-                    this.setError()
-                    break
+
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                this.addOperation(parseInt(value))
+                break
+
+            default:
+                this.setError()
+                break
         }
 
     }
